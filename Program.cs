@@ -1,1 +1,1 @@
-﻿Console.WriteLine("Привіт світ!");
+﻿Console.WriteLine("hello my home !");
