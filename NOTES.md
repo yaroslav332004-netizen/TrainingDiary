@@ -116,9 +116,10 @@
 ## ЛР 7
 
 - У `TrainingDiary.App.csproj` додано `<RuntimeIdentifiers>win-x64;osx-arm64;linux-x64</RuntimeIdentifiers>` і явне `<InvariantGlobalization>false</InvariantGlobalization>` (це типове значення, пишу лише щоб було видно, що режим без правил мов вимкнено навмисно).
-- Файл щоденника перенесено з каталогу застосунку до каталогу даних користувача: `DiaryLocation` у бібліотеці (`Environment.GetFolderPath(SpecialFolder.ApplicationData)` плюс `TrainingDiary`). У Windows це `%APPDATA%\TrainingDiary`, у macOS і Linux `~/.config/TrainingDiary`. Каталог застосунку не годиться: у Program Files звичайний користувач писати не може, а під час оновлення вміст каталогу замінюють.
+- Файл щоденника перенесено з каталогу застосунку до каталогу даних користувача: `DiaryLocation` у бібліотеці (`Environment.GetFolderPath(SpecialFolder.ApplicationData)` плюс `TrainingDiary`). У Windows це `%APPDATA%\TrainingDiary`, у Linux `~/.config/TrainingDiary`, а в macOS шлях визначає система: на GitHub Actions файл у `~/.config` на macOS не знайшовся, тому шлях беру з `--info`, а не вгадую. Каталог застосунку не годиться: у Program Files звичайний користувач писати не може, а під час оновлення вміст каталогу замінюють.
 - `PlatformInfo` лежить у каталозі `Platform` (не `Environment`: інакше простір імен затінив би клас `System.Environment`, і `Environment.GetFolderPath` перестав би збиратися). Тому в `Describe` написано повне `System.Environment.NewLine`. Звіт складає ядро, а рамку для нього малює оболонка.
 - Ключ `--info` обробляється одразу після `Console.OutputEncoding`, інакше у Windows звіт вивівся б у неправильному кодуванні. Заголовок сеансу тепер містить назву системи (`OsName`).
+- У бібліотеку додано відкритий клас `DiaryLocation`, тому підняв `Version` у `TrainingDiary.Core.csproj` до `1.1.0` і оновив версію в `tools/DiaryReport/DiaryReport.csproj`. Якби лишилася `1.0.0`, NuGet узяв би з кешу старий пакет без `DiaryLocation`, і другий застосунок не зібрався б (CS0103): я на цьому й спіткнувся під час перевірки.
 - `publish.sh` і `publish.ps1` публікують під три RID командою `dotnet publish ... --self-contained true`. Вихідний текст при цьому не змінюється: тричі запускається та сама команда з різним RID.
 
 ### Виведення `--info` на двох системах

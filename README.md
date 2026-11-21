@@ -21,7 +21,7 @@
 
     dotnet run --project TrainingDiary.App -- --info
 
-Файл даних лежить у каталозі даних користувача: `%APPDATA%\TrainingDiary` у Windows, `~/.config/TrainingDiary` у macOS і Linux.
+Файл даних лежить у каталозі даних користувача: `%APPDATA%\TrainingDiary` у Windows, `~/.config/TrainingDiary` у Linux; у macOS каталог визначає система, точний шлях показує `--info`.
 
 ## Публікація
 

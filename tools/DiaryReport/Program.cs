@@ -2,7 +2,8 @@ using TrainingDiary.Storage;
 
 Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-var file = args.Length > 0 ? args[0] : "diary.json";
+// Без аргументу беремо щоденник із каталогу даних користувача — на будь-якій системі.
+var file = args.Length > 0 ? args[0] : DiaryLocation.DiaryFile;
 
 if (!File.Exists(file))
 {
