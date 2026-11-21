@@ -2,18 +2,32 @@ using System.Text;
 using Spectre.Console;
 using TrainingDiary.Exercises;
 using TrainingDiary.Ordering;
+using TrainingDiary.Platform;
 using TrainingDiary.Storage;
 using TrainingDiary.Workout;
 
 Console.OutputEncoding = Encoding.UTF8;
 
-AnsiConsole.Write(new Rule("[bold]Щоденник тренувань[/]")
+if (args.Contains("--info"))
+{
+    // Text друкує рядок як є: дужки в шляхах не сприймуться як розмітка.
+    AnsiConsole.Write(new Panel(new Text(PlatformInfo.Describe()))
+    {
+        Header = new PanelHeader("Відомості про систему"),
+        Border = BoxBorder.Rounded
+    });
+
+    return 0;
+}
+
+AnsiConsole.Write(new Rule(
+    $"[bold]Щоденник тренувань[/] · {Markup.Escape(PlatformInfo.OsName)}")
 {
     Justification = Justify.Left
 });
 
-var file = Path.Combine(AppContext.BaseDirectory, "data", "diary.json");
-var storage = new JsonExerciseStorage(file);
+// Файл лежить у каталозі даних користувача, а не поруч із застосунком.
+var storage = new JsonExerciseStorage(DiaryLocation.DiaryFile);
 
 try
 {

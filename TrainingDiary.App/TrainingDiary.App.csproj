@@ -8,6 +8,8 @@
     <RootNamespace>TrainingDiary.App</RootNamespace>
     <!-- Ім’я виконуваного файлу. -->
     <AssemblyName>diary</AssemblyName>
+    <RuntimeIdentifiers>win-x64;osx-arm64;linux-x64</RuntimeIdentifiers>
+    <InvariantGlobalization>false</InvariantGlobalization>
   </PropertyGroup>
 
   <ItemGroup>
