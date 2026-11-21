@@ -9,7 +9,7 @@ public static class DiaryLocation
 {
     /// <summary>
     /// Windows — %APPDATA%\TrainingDiary, Linux — ~/.config/TrainingDiary.
-    /// У macOS каталог визначає сама система, тож точний шлях показує ключ --info.
+    /// У macOS — ~/Library/Application Support/TrainingDiary.
     /// </summary>
     public static string Folder => Path.Combine(
         Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
