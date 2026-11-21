@@ -5,11 +5,24 @@
 
 Це навчальний проєкт з дисципліни «Крос-платформне програмування» (ЖДУ імені Івана Франка). Він збирається й запускається у Windows, macOS і Linux.
 
+## Структура
+
+- `TrainingDiary.Core/` — бібліотека класів: вправи, порядок перебору, сховище, ядро сеансу. Без жодного коду для виведення.
+- `TrainingDiary.App/` — консольна оболонка на Spectre.Console.
+- `tools/DiaryReport/` — другий застосунок, який підключає бібліотеку пакетом NuGet, а не проєктом.
+
 ## Як запустити
 
 Потрібен .NET SDK 10.
 
-    dotnet run
+    dotnet run --project TrainingDiary.App
+
+## Пакет бібліотеки
+
+    dotnet pack TrainingDiary.Core -c Release -o ./packages
+    dotnet run --project tools/DiaryReport -- TrainingDiary.App/bin/Debug/net10.0/data/diary.json
+
+Локальне джерело пакетів описано в `nuget.config`. Після зміни бібліотеки збільшіть `Version` у `TrainingDiary.Core.csproj`, запакуйте знову й оновіть версію в `tools/DiaryReport/DiaryReport.csproj`.
 
 ## Карта назв
 
