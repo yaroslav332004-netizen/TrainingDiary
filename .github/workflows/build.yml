@@ -24,13 +24,7 @@ jobs:
       - name: Пакет бібліотеки
         run: dotnet pack TrainingDiary.Core -c Release -o ./packages
       - name: Другий застосунок із пакета
-        shell: bash
-        run: dotnet run --project tools/DiaryReport -- "$HOME/.config/TrainingDiary/diary.json"
-        if: runner.os != 'Windows'
-      - name: Другий застосунок із пакета (Windows)
-        shell: bash
-        run: dotnet run --project tools/DiaryReport -- "$APPDATA/TrainingDiary/diary.json"
-        if: runner.os == 'Windows'
+        run: dotnet run --project tools/DiaryReport
 
   publish:
     runs-on: ubuntu-latest
