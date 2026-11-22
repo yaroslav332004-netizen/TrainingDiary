@@ -1,6 +1,7 @@
 namespace TrainingDiary.Exercises;
 
 /// <summary>Вправа на час: навантаження залежить від тривалості в хвилинах.</summary>
+[ExerciseKind("timed", "На час")]
 public class TimedExercise : Exercise
 {
     /// <summary>Скільки балів дає одна хвилина.</summary>
@@ -34,8 +35,6 @@ public class TimedExercise : Exercise
     public override string LoadRule => $"{PointsPerMinute:0.##} б. за хвилину (до {MaxMinutes:0.##} хв)";
 
     public override string Prompt => "Тривалість, хв";
-
-    public override string Kind => "timed";
 
     public override void WriteData(IDictionary<string, string> data)
     {

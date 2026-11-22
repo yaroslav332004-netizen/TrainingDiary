@@ -1,6 +1,7 @@
 namespace TrainingDiary.Exercises;
 
 /// <summary>Вправа на дистанцію: навантаження залежить від кілометрів, довга дистанція дає бонус.</summary>
+[ExerciseKind("distance", "На дистанцію")]
 public class DistanceExercise : Exercise
 {
     /// <summary>Бонус за кожен кілометр понад межу — половина звичайної ціни кілометра.</summary>
@@ -45,8 +46,6 @@ public class DistanceExercise : Exercise
             : $"{PointsPerKm:0.##} б. за км";
 
     public override string Prompt => "Дистанція, км";
-
-    public override string Kind => "distance";
 
     public override void WriteData(IDictionary<string, string> data)
     {

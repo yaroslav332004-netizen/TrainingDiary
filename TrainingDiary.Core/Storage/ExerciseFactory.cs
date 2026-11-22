@@ -2,19 +2,17 @@ using TrainingDiary.Exercises;
 
 namespace TrainingDiary.Storage;
 
-internal static class ExerciseFactory
+internal class ExerciseFactory
 {
-    public static Exercise? Create(string kind) => kind switch
-    {
-        "timed" => new TimedExercise(),
-        "reps" => new RepsExercise(),
-        "distance" => new DistanceExercise(),
-        _ => null
-    };
+    private readonly ExerciseCatalog catalog;
 
-    public static Exercise? FromRecord(ExerciseRecord record)
+    public ExerciseFactory(ExerciseCatalog catalog) => this.catalog = catalog;
+
+    // Перестав бути static: тепер користується полем catalog.
+    public Exercise? FromRecord(ExerciseRecord record)
     {
-        var exercise = Create(record.Kind);
+        // Замість switch — запит до каталогу.
+        var exercise = catalog.Create(record.Kind);
 
         if (exercise is null)
             return null;
@@ -27,6 +25,7 @@ internal static class ExerciseFactory
         return exercise;
     }
 
+    // ToRecord лишається static: каталог йому не потрібен.
     public static ExerciseRecord ToRecord(Exercise exercise)
     {
         var record = new ExerciseRecord

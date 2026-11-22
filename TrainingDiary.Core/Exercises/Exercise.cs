@@ -29,8 +29,8 @@ public abstract class Exercise
     /// <summary>Підказка, що вводити. Різновид може змінити.</summary>
     public virtual string Prompt => "Кількість";
 
-    /// <summary>Позначка різновиду: під нею вправу пишуть у файл.</summary>
-    public abstract string Kind { get; }
+    /// <summary>Позначка різновиду: під нею вправу пишуть у файл. Береться з атрибута [ExerciseKind].</summary>
+    public virtual string Kind => ExerciseKinds.Of(GetType());
 
     /// <summary>Записує власні дані різновиду до словника.</summary>
     public abstract void WriteData(IDictionary<string, string> data);

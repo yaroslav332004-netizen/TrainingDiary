@@ -14,8 +14,17 @@ public class JsonExerciseStorage : IExerciseStorage
     };
 
     private readonly string path;
+    private readonly ExerciseFactory factory;
 
-    public JsonExerciseStorage(string path) => this.path = path;
+    /// <summary>Сховище з різновидами, які знає ядро.</summary>
+    public JsonExerciseStorage(string path) : this(path, ExerciseCatalog.Default) { }
+
+    /// <summary>Сховище з власним каталогом різновидів.</summary>
+    public JsonExerciseStorage(string path, ExerciseCatalog catalog)
+    {
+        this.path = path;
+        factory = new ExerciseFactory(catalog);
+    }
 
     public string Path => path;
 
@@ -53,7 +62,7 @@ public class JsonExerciseStorage : IExerciseStorage
 
         foreach (var record in records ?? new List<ExerciseRecord>())
         {
-            var exercise = record is null ? null : ExerciseFactory.FromRecord(record);
+            var exercise = record is null ? null : factory.FromRecord(record);
 
             // Запис невідомого різновиду пропускають, решту читають.
             if (exercise is not null)

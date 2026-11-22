@@ -3,6 +3,7 @@ using System.Globalization;
 namespace TrainingDiary.Exercises;
 
 /// <summary>Вправа на повторення: навантаження залежить від кількості повторень і складності варіанта.</summary>
+[ExerciseKind("reps", "На повторення")]
 public class RepsExercise : Exercise
 {
     /// <summary>Скільки балів дає одне повторення.</summary>
@@ -57,8 +58,6 @@ public class RepsExercise : Exercise
         $"{PointsPerRep:0.##} б. за повторення, варіант «{this[ValidVariant]}» ×{VariantFactor:0.##}";
 
     public override string Prompt => "Кількість повторень";
-
-    public override string Kind => "reps";
 
     public override void WriteData(IDictionary<string, string> data)
     {

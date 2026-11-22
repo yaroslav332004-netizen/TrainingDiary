@@ -3,6 +3,7 @@ using Spectre.Console;
 using TrainingDiary.Exercises;
 using TrainingDiary.Ordering;
 using TrainingDiary.Platform;
+using TrainingDiary.Plugins;
 using TrainingDiary.Storage;
 using TrainingDiary.Workout;
 
@@ -20,6 +21,32 @@ if (args.Contains("--info"))
     return 0;
 }
 
+var catalog = ExerciseCatalog.Default;
+var plugins = PluginLoader.LoadInto(catalog);
+
+foreach (var line in plugins)
+    AnsiConsole.MarkupLineInterpolated($"[grey]Складник {line}[/]");
+
+if (args.Contains("--kinds"))
+{
+    var kinds = new Table { Border = TableBorder.Rounded };
+    kinds.AddColumn("Позначка");
+    kinds.AddColumn("Назва");
+    kinds.AddColumn("Збірка");
+
+    foreach (var kind in catalog.Kinds.OrderBy(k => k.Kind))
+        kinds.AddRow(
+            new Text(kind.Kind),
+            new Text(kind.Title),
+            new Text(kind.Type.Assembly.GetName().Name ?? "?"));
+
+    AnsiConsole.Write(kinds);
+    AnsiConsole.MarkupLineInterpolated(
+        $"[grey]Каталог складників: {PluginLoader.DefaultFolder}[/]");
+
+    return 0;
+}
+
 AnsiConsole.Write(new Rule(
     $"[bold]Щоденник тренувань[/] · {Markup.Escape(PlatformInfo.OsName)}")
 {
@@ -27,7 +54,7 @@ AnsiConsole.Write(new Rule(
 });
 
 // Файл лежить у каталозі даних користувача, а не поруч із застосунком.
-var storage = new JsonExerciseStorage(DiaryLocation.DiaryFile);
+var storage = new JsonExerciseStorage(DiaryLocation.DiaryFile, catalog);
 
 try
 {

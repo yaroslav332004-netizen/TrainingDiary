@@ -8,6 +8,7 @@
 
 - `TrainingDiary.Core/` — бібліотека класів: вправи, порядок перебору, сховище, ядро сеансу. Без жодного коду для виведення.
 - `TrainingDiary.App/` — консольна оболонка на Spectre.Console.
+- `plugins/TrainingDiary.Exercises.Interval/` — складник із четвертим різновидом (вправа на інтервали). Застосунок на нього не посилається.
 - `tools/DiaryReport/` — другий застосунок, який підключає бібліотеку пакетом NuGet, а не проєктом.
 
 ## Як запустити
@@ -21,6 +22,32 @@
     dotnet run --project TrainingDiary.App -- --info
 
 Файл даних лежить у каталозі даних користувача: `%APPDATA%\TrainingDiary` у Windows, `~/.config/TrainingDiary` у Linux; у macOS `~/Library/Application Support/TrainingDiary`.
+
+## Різновиди вправ і складники
+
+Різновиди позначено атрибутом `[ExerciseKind("позначка", "назва")]`, а каталог знаходить їх рефлексією. Показати відомі різновиди й те, з якої збірки кожен узявся:
+
+    dotnet run --project TrainingDiary.App -- --kinds
+
+Щоб установити складник, зберіть його й скопіюйте `.dll` у каталог `plugins` поруч із застосунком (ядро й застосунок перезбирати не треба).
+
+macOS і Linux:
+
+    dotnet build TrainingDiary.App -c Debug
+    dotnet build plugins/TrainingDiary.Exercises.Interval -c Debug
+    mkdir -p TrainingDiary.App/bin/Debug/net10.0/plugins
+    cp plugins/TrainingDiary.Exercises.Interval/bin/Debug/net10.0/TrainingDiary.Exercises.Interval.dll \
+       TrainingDiary.App/bin/Debug/net10.0/plugins/
+    dotnet run --project TrainingDiary.App --no-build -- --kinds
+
+Windows (PowerShell):
+
+    dotnet build TrainingDiary.App -c Debug
+    dotnet build plugins/TrainingDiary.Exercises.Interval -c Debug
+    $target = "TrainingDiary.App/bin/Debug/net10.0/plugins"
+    New-Item -ItemType Directory -Force -Path $target
+    Copy-Item plugins/TrainingDiary.Exercises.Interval/bin/Debug/net10.0/TrainingDiary.Exercises.Interval.dll -Destination $target
+    dotnet run --project TrainingDiary.App --no-build -- --kinds
 
 ## Публікація
 
