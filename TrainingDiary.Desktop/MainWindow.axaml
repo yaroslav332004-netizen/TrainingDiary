@@ -1,0 +1,68 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:vm="using:TrainingDiary.Desktop.ViewModels"
+        x:Class="TrainingDiary.Desktop.MainWindow"
+        x:DataType="vm:MainViewModel"
+        Title="Щоденник тренувань"
+        Width="620" Height="520">
+
+  <Window.Styles>
+    <Style Selector="Border.feedback.correct">
+      <Setter Property="Background" Value="#3322C55E" />
+    </Style>
+    <Style Selector="Border.feedback.wrong">
+      <Setter Property="Background" Value="#33EF4444" />
+    </Style>
+  </Window.Styles>
+
+  <DockPanel Margin="20">
+
+    <TextBlock DockPanel.Dock="Top"
+               Text="{Binding Status}"
+               Opacity="0.7" Margin="0,0,0,14" />
+
+    <ProgressBar DockPanel.Dock="Top" Margin="0,0,0,14"
+                 Maximum="{Binding Total}" Value="{Binding Done}" />
+
+    <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal"
+                Spacing="10" Margin="0,16,0,0">
+      <Button Content="Зарахувати" Command="{Binding CheckCommand}"
+              IsDefault="True" />
+      <Button Content="Далі" Command="{Binding NextCommand}"
+              IsDefault="True" />
+    </StackPanel>
+
+    <StackPanel Spacing="12">
+      <TextBlock Text="{Binding Title}" FontSize="20"
+                 TextWrapping="Wrap" IsVisible="{Binding HasExercise}" />
+      <TextBlock Text="{Binding Rule}" Opacity="0.7"
+                 TextWrapping="Wrap" IsVisible="{Binding HasExercise}" />
+
+      <ContentControl Content="{Binding Input}" IsVisible="{Binding HasExercise}">
+        <ContentControl.DataTemplates>
+          <DataTemplate DataType="vm:RepsInput">
+            <StackPanel Spacing="8">
+              <ListBox ItemsSource="{Binding Options}"
+                       SelectedIndex="{Binding SelectedIndex}" />
+              <TextBox Text="{Binding Text}" Watermark="{Binding Prompt}" />
+            </StackPanel>
+          </DataTemplate>
+          <DataTemplate DataType="vm:TextInput">
+            <TextBox Text="{Binding Text}" Watermark="{Binding Prompt}" />
+          </DataTemplate>
+        </ContentControl.DataTemplates>
+      </ContentControl>
+
+      <Border Classes="feedback" Padding="12,8" CornerRadius="6"
+              Classes.correct="{Binding IsCorrect}"
+              Classes.wrong="{Binding IsWrong}">
+        <TextBlock Text="{Binding Feedback}" TextWrapping="Wrap"
+                   FontWeight="SemiBold" />
+      </Border>
+
+      <TextBlock Text="{Binding Summary}" TextWrapping="Wrap" />
+    </StackPanel>
+
+  </DockPanel>
+
+</Window>

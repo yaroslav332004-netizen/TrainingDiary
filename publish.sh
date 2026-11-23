@@ -5,10 +5,14 @@ cd "$(dirname "$0")"
 
 for rid in win-x64 osx-arm64 linux-x64; do
   echo "== $rid"
-  dotnet publish TrainingDiary.App -c Release -r "$rid" \
-     --self-contained true -o "publish/$rid"
+  for project in TrainingDiary.App TrainingDiary.Desktop; do
+    # Кожна оболонка — у власний каталог: дві самодостатні збірки
+    # в одному каталозі перезаписали б файли середовища виконання.
+    dotnet publish "$project" -c Release -r "$rid" \
+      --self-contained true -o "publish/$rid/$project"
+  done
 done
 
-# Право на виконання губиться в zip і у файлообмінниках.
-chmod +x publish/linux-x64/diary \
-         publish/osx-arm64/diary 2>/dev/null || true
+# Каталоги змінилися — право на виконання ставимо вже в нових.
+chmod +x publish/*/TrainingDiary.App/diary \
+         publish/*/TrainingDiary.Desktop/diary-ui 2>/dev/null || true

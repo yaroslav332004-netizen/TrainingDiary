@@ -8,6 +8,7 @@
 
 - `TrainingDiary.Core/` — бібліотека класів: вправи, порядок перебору, сховище, ядро сеансу. Без жодного коду для виведення.
 - `TrainingDiary.App/` — консольна оболонка на Spectre.Console.
+- `TrainingDiary.Desktop/` — віконна оболонка на Avalonia UI над тим самим ядром.
 - `plugins/TrainingDiary.Exercises.Interval/` — складник із четвертим різновидом (вправа на інтервали). Застосунок на нього не посилається.
 - `tools/DiaryReport/` — другий застосунок, який підключає бібліотеку пакетом NuGet, а не проєктом.
 
@@ -22,6 +23,19 @@
     dotnet run --project TrainingDiary.App -- --info
 
 Файл даних лежить у каталозі даних користувача: `%APPDATA%\TrainingDiary` у Windows, `~/.config/TrainingDiary` у Linux; у macOS `~/Library/Application Support/TrainingDiary`.
+
+## Дві оболонки над одним ядром
+
+Ядро (`TrainingDiary.Core`) не знає ні про консоль, ні про вікно, і заради віконної оболонки в ньому не змінено жодного рядка. Консольна й віконна оболонки обидві звертаються до тих самих класів: `WorkoutSession`, `Exercise` та його різновидів. Вправи перевіряє й навантаження рахує ядро, тому результати в обох оболонках збігаються. Оболонка відповідає лише за вигляд і за введення.
+
+- Консоль: `dotnet run --project TrainingDiary.App`
+- Вікно: `dotnet run --project TrainingDiary.Desktop`
+
+У віконній оболонці стан описано моделлю подання (`ViewModels/`, без жодного типу Avalonia), розмітку `MainWindow.axaml` з’єднано з нею прив’язками, а кнопки — з командами. Кожен різновид вправи має власний спосіб введення, який розмітка добирає шаблоном даних за типом: вправа на повторення — список варіантів і поле кількості, решта вправ — поле введення. Код вікна `MainWindow.axaml.cs` містить лише конструктор.
+
+**Знімки:** *[додати знімок вікна й знімок консолі]*
+
+Для віконної оболонки в Linux потрібні системні бібліотеки: `libx11-6`, `libice6`, `libsm6`, `libfontconfig1`.
 
 ## Різновиди вправ і складники
 
@@ -56,11 +70,13 @@ Windows (PowerShell):
     ./publish.sh        # macOS і Linux
     ./publish.ps1       # Windows (PowerShell)
 
-| RID | Для кого | Що запускати |
-|---|---|---|
-| `win-x64` | Windows, 64-розрядні процесори | `publish/win-x64/diary.exe` |
-| `osx-arm64` | macOS на процесорах Apple | `publish/osx-arm64/diary` |
-| `linux-x64` | Linux, 64-розрядні процесори | `publish/linux-x64/diary` |
+Кожна оболонка публікується у власний каталог: `publish/<RID>/TrainingDiary.App` і `publish/<RID>/TrainingDiary.Desktop`.
+
+| RID | Для кого | Консоль | Вікно |
+|---|---|---|---|
+| `win-x64` | Windows, 64-розрядні процесори | `publish/win-x64/TrainingDiary.App/diary.exe` | `publish/win-x64/TrainingDiary.Desktop/diary-ui.exe` |
+| `osx-arm64` | macOS на процесорах Apple | `publish/osx-arm64/TrainingDiary.App/diary` | `publish/osx-arm64/TrainingDiary.Desktop/diary-ui` |
+| `linux-x64` | Linux, 64-розрядні процесори | `publish/linux-x64/TrainingDiary.App/diary` | `publish/linux-x64/TrainingDiary.Desktop/diary-ui` |
 
 Перешкоди під час запуску:
 
