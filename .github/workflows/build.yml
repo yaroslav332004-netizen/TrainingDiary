@@ -18,6 +18,12 @@ jobs:
         run: dotnet build TrainingDiary.sln
       - name: Відомості про систему (--info)
         run: dotnet run --no-build --project TrainingDiary.App -- --info
+      - name: Установлення складника копіюванням і ключ --kinds
+        shell: bash
+        run: |
+          mkdir -p TrainingDiary.App/bin/Debug/net10.0/plugins
+          cp plugins/TrainingDiary.Exercises.Interval/bin/Debug/net10.0/TrainingDiary.Exercises.Interval.dll TrainingDiary.App/bin/Debug/net10.0/plugins/
+          dotnet run --no-build --project TrainingDiary.App -- --kinds
       - name: Запуск застосунку (відповіді з каналу)
         shell: bash
         run: printf '5\n5\n5\n5\n5\n' | dotnet run --no-build --project TrainingDiary.App
