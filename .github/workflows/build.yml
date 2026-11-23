@@ -42,9 +42,9 @@ jobs:
       - name: Публікація під три системи (самодостатня)
         run: bash publish.sh
       - name: Залежна збірка для порівняння
-        run: dotnet publish TrainingDiary.App -c Release -r linux-x64 -o publish/linux-x64-dep
+        run: dotnet publish TrainingDiary.App -c Release -r linux-x64 -o publish/linux-x64/TrainingDiary.App-dep
       - name: Розміри каталогів
-        run: du -sh publish/*
+        run: du -sh publish/*/*
       - uses: actions/upload-artifact@v4
         with:
           name: publish
